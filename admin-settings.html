@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GovtPrep Admin — Settings</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.settings-section{margin-bottom:28px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(163,177,198,.2);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-info p{font-size:.87rem;font-weight:600;color:#1f2937;margin-bottom:2px;}
+.toggle-info span{font-size:.77rem;color:#6b7280;}
+.toggle{width:44px;height:24px;border-radius:12px;background:rgba(163,177,198,.4);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;box-shadow:inset 2px 2px 4px rgba(163,177,198,.5),inset -2px -2px 4px rgba(255,255,255,.7);}
+.toggle.on{background:linear-gradient(135deg,#6366f1,#8b5cf6);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:1px 1px 4px rgba(0,0,0,.15);}
+.toggle.on::after{left:23px;}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="7" stroke="#4f46e5" stroke-width="2"/><path d="M16 2v4M16 26v4M2 16h4M26 16h4" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="3" fill="#4f46e5"/></svg></div>
+    <div><div class="logo-text">GovtPrep</div><div class="logo-sub">Admin Panel</div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <a href="admin-dashboard.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="admin-students.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Students</a>
+    <a href="admin-courses.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Courses</a>
+    <a href="admin-tests.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Mock Tests</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Manage</div>
+    <a href="admin-payments.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Payments</a>
+    <a href="admin-reports.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Reports</a>
+    <a href="admin-settings.html" class="nav-item active"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 6.34L3.93 4.93M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>Settings</a>
+  </div>
+  <div class="sidebar-footer"><a href="login.html" class="nav-item" style="color:#ef4444;"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div><h1>Settings</h1><p>Manage platform configuration</p></div>
+    <div class="topbar-right"><button class="hamburger" onclick="toggleSidebar()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><div class="avatar">AD</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="section-title settings-section">Platform Details</div>
+        <div class="form-group"><label>Platform Name</label><input type="text" class="form-input" id="platformName" value="GovtPrep"></div>
+        <div class="form-group"><label>Support Email</label><input type="email" class="form-input" id="supportEmail" value="support@govtprep.in"></div>
+        <div class="form-group"><label>Contact Number</label><input type="tel" class="form-input" id="contactNumber" value="+91 98765 43210"></div>
+        <div class="form-group"><label>Website URL</label><input type="url" class="form-input" id="websiteUrl" value="https://govtprep.in"></div>
+        <button class="cta-btn btn-block" id="saveSettingsBtn" onclick="saveSettings()">Save Changes</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title settings-section">Change Admin Password</div>
+        <div class="form-group"><label>Current Password</label><input type="password" class="form-input" id="currentPassword" placeholder="********"></div>
+        <div class="form-row">
+          <div class="form-group"><label>New Password</label><input type="password" class="form-input" id="newPassword" placeholder="********"></div>
+          <div class="form-group"><label>Confirm</label><input type="password" class="form-input" id="confirmPassword" placeholder="********"></div>
+        </div>
+        <button class="cta-btn btn-block" onclick="updatePassword()">Update Password</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:8px;">Notifications</div>
+        <div class="toggle-row"><div class="toggle-info"><p>New Registration Alerts</p><span>Notify admin on new sign-ups</span></div><button class="toggle" id="togRegAlerts" onclick="toggleSetting(this, 'regAlerts')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Payment Alerts</p><span>Notify on successful payments</span></div><button class="toggle" id="togPaymentAlerts" onclick="toggleSetting(this, 'paymentAlerts')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Test Completion Reports</p><span>Daily digest of test activity</span></div><button class="toggle" id="togTestReports" onclick="toggleSetting(this, 'testReports')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Refund Requests</p><span>Alert on refund submissions</span></div><button class="toggle" id="togRefundAlerts" onclick="toggleSetting(this, 'refundAlerts')"></button></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="margin-bottom:8px;">Platform Features</div>
+        <div class="toggle-row"><div class="toggle-info"><p>Student Registrations</p><span>Allow new sign-ups</span></div><button class="toggle" id="togStudentReg" onclick="toggleSetting(this, 'studentRegistrations')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Free Mock Tests</p><span>Enable free test access</span></div><button class="toggle" id="togFreeTests" onclick="toggleSetting(this, 'freeMockTests')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Google Login</p><span>OAuth sign-in via Google</span></div><button class="toggle" id="togGoogleLogin" onclick="toggleSetting(this, 'googleLogin')"></button></div>
+        <div class="toggle-row"><div class="toggle-info"><p>Maintenance Mode</p><span>Show maintenance page</span></div><button class="toggle" id="togMaintenance" onclick="toggleSetting(this, 'maintenanceMode')"></button></div>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
+
+const API = '/api';
+
+const toggleIds = {
+  regAlerts: 'togRegAlerts',
+  paymentAlerts: 'togPaymentAlerts',
+  testReports: 'togTestReports',
+  refundAlerts: 'togRefundAlerts',
+  studentRegistrations: 'togStudentReg',
+  freeMockTests: 'togFreeTests',
+  googleLogin: 'togGoogleLogin',
+  maintenanceMode: 'togMaintenance'
+};
+
+async function loadSettings() {
+  try {
+    const res = await fetch(API + '/settings');
+    const raw = await res.json();
+    const data = raw.data || raw;
+    if (data.platformName) document.getElementById('platformName').value = data.platformName;
+    if (data.supportEmail) document.getElementById('supportEmail').value = data.supportEmail;
+    if (data.contactNumber) document.getElementById('contactNumber').value = data.contactNumber;
+    if (data.websiteUrl) document.getElementById('websiteUrl').value = data.websiteUrl;
+    Object.entries(toggleIds).forEach(([key, id]) => {
+      const el = document.getElementById(id);
+      if (el && data[key] === true) el.classList.add('on');
+    });
+  } catch (err) {
+    console.log('Could not load settings, using defaults');
+  }
+}
+
+async function saveSettings() {
+  const btn = document.getElementById('saveSettingsBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+  try {
+    const body = {
+      platformName: document.getElementById('platformName').value,
+      supportEmail: document.getElementById('supportEmail').value,
+      contactNumber: document.getElementById('contactNumber').value,
+      websiteUrl: document.getElementById('websiteUrl').value
+    };
+    Object.keys(toggleIds).forEach(key => {
+      body[key] = document.getElementById(toggleIds[key]).classList.contains('on');
+    });
+    await fetch(API + '/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    alert('Settings saved!');
+  } catch (err) {
+    alert('Failed to save settings');
+  } finally {
+    btn.textContent = 'Save Changes';
+    btn.disabled = false;
+  }
+}
+
+async function toggleSetting(el, key) {
+  el.classList.toggle('on');
+  try {
+    const body = {};
+    body[key] = el.classList.contains('on');
+    await fetch(API + '/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  } catch (err) {
+    el.classList.toggle('on');
+    console.log('Toggle failed, reverting');
+  }
+}
+
+function updatePassword() {
+  const current = document.getElementById('currentPassword').value;
+  const newPw = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+  if (!current || !newPw || !confirm) { alert('Please fill all password fields'); return; }
+  if (newPw !== confirm) { alert('New passwords do not match'); return; }
+  fetch(API + '/settings/password', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: current, newPassword: newPw }) })
+    .then(r => { if (r.ok) alert('Password updated!'); else alert('Failed to update password'); })
+    .catch(() => alert('Failed to update password'));
+}
+
+loadSettings();
+</script>
+</body>
+</html>

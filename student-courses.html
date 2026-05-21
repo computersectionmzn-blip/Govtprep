@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GovtPrep — My Courses</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.course-card{background:rgba(255,255,255,.32);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.5);border-radius:20px;box-shadow:6px 6px 16px rgba(163,177,198,.55),-6px -6px 16px rgba(255,255,255,.85);padding:22px;margin-bottom:16px;}
+.course-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:14px;}
+.course-emoji{font-size:2.2rem;flex-shrink:0;}
+.course-info{flex:1;}
+.course-title{font-size:1rem;font-weight:700;color:#1f2937;margin-bottom:4px;}
+.course-meta{font-size:.77rem;color:#6b7280;margin-bottom:8px;}
+.course-actions{display:flex;gap:10px;margin-top:14px;}
+.lesson-count{font-size:.75rem;font-weight:600;color:#4f46e5;background:rgba(237,233,254,.6);padding:3px 10px;border-radius:10px;}
+.loading-spinner{width:40px;height:40px;border:4px solid rgba(79,70,229,0.1);border-left-color:#4f46e5;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{text-align:center;color:#6b7280;font-size:.85rem;padding:20px;}
+.error-text{text-align:center;color:#b91c1c;font-size:.85rem;padding:20px;}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="7" stroke="#4f46e5" stroke-width="2"/><path d="M16 2v4M16 26v4M2 16h4M26 16h4" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="3" fill="#4f46e5"/></svg></div>
+    <div><div class="logo-text">GovtPrep</div><div class="logo-sub">Student Portal</div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <a href="student-dashboard.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="student-courses.html" class="nav-item active"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>My Courses</a>
+    <a href="student-tests.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Mock Tests</a>
+    <a href="student-performance.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Performance</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Study</div>
+    <a href="student-practice.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Practice Zone</a>
+    <a href="student-plan.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Study Plan</a>
+    <a href="student-affairs.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Current Affairs</a>
+  </div>
+  <div class="sidebar-footer"><a href="login.html" class="nav-item" style="color:#ef4444;"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div><h1>My Courses</h1><p>Continue your learning journey</p></div>
+    <div class="topbar-right">
+      <button class="hamburger" onclick="toggleSidebar()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="notif-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notif-dot"></span></button>
+      <div class="avatar" id="avatarInitials">RS</div>
+    </div>
+  </div>
+
+  <div id="coursesLoading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading your courses...</div>
+  </div>
+
+  <div id="coursesContent" style="display:none;">
+    <div class="stats-grid" id="statsGrid"></div>
+    <div id="coursesList"></div>
+
+    <div class="card" style="text-align:center;padding:30px;">
+      <div style="font-size:1.5rem;margin-bottom:8px;">📚</div>
+      <div style="font-size:.95rem;font-weight:700;color:#1f2937;margin-bottom:4px;">Explore More Courses</div>
+      <div style="font-size:.82rem;color:#6b7280;margin-bottom:16px;">Prepare for Railway, State PSC, and more</div>
+      <button class="cta-btn" style="display:inline-flex;" onclick="alert('Course catalog coming soon!')">Browse All Courses</button>
+    </div>
+  </div>
+</main>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<script>
+const API = '/api';
+const userId = localStorage.getItem('userId');
+
+const emojiMap = ['📜','📊','🏦','📚','🧮','✍️','🌍','🔬'];
+const colorMap = [
+  ['#6366f1','#a5b4fc'],
+  ['#22c55e','#86efac'],
+  ['#f97316','#fdba74'],
+  ['#0ea5e9','#7dd3fc'],
+  ['#8b5cf6','#c4b5fd'],
+  ['#ec4899','#f9a8d4'],
+  ['#14b8a6','#99f6e4'],
+  ['#f59e0b','#fcd34d']
+];
+
+async function loadCourses() {
+  const loading = document.getElementById('coursesLoading');
+  const content = document.getElementById('coursesContent');
+
+  try {
+    const res = await fetch(`${API}/courses/student/${userId}`);
+    if (!res.ok) throw new Error('Failed to fetch courses');
+    const data = await res.json();
+
+    const userName = localStorage.getItem('userName') || 'Student';
+    const parts = userName.split(' ');
+    document.getElementById('avatarInitials').textContent = parts.map(p => p[0]).join('').substring(0,2).toUpperCase();
+
+    const courses = data.data || [];
+    const totalCompleted = courses.reduce((s, c) => s + (c.completedLessons || 0), 0);
+    const totalLessons = courses.reduce((s, c) => s + (c.totalLessons || 0), 0);
+    const avgProgress = courses.length ? Math.round(courses.reduce((s, c) => {
+      const p = c.totalLessons ? Math.round((c.completedLessons / c.totalLessons) * 100) : 0;
+      return s + p;
+    }, 0) / courses.length) : 0;
+    const totalHours = courses.reduce((s, c) => s + (c.studyHours || 0), 0);
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon blue"></div><div class="stat-val">${courses.length}</div><div class="stat-lbl">Enrolled Courses</div></div>
+      <div class="stat-card"><div class="stat-icon green"></div><div class="stat-val">${totalCompleted}</div><div class="stat-lbl">Lessons Completed</div></div>
+      <div class="stat-card"><div class="stat-icon purple"></div><div class="stat-val">${avgProgress}%</div><div class="stat-lbl">Overall Progress</div></div>
+      <div class="stat-card"><div class="stat-icon orange"></div><div class="stat-val">${totalHours}h</div><div class="stat-lbl">Study Time</div></div>
+    `;
+
+    const coursesList = document.getElementById('coursesList');
+    if (courses.length > 0) {
+      coursesList.innerHTML = courses.map((course, i) => {
+        const ci = i % colorMap.length;
+        return `
+          <div class="course-card">
+            <div class="course-top">
+              <div class="course-emoji">${emojiMap[ci]}</div>
+              <div class="course-info">
+                <div class="course-title">${course.title}</div>
+                <div class="course-meta">${course.description || ''} · <span class="lesson-count">${course.completedLessons || 0}/${course.totalLessons || 0} lessons done</span></div>
+                <div class="prog-bar-bg"><div class="prog-bar" style="width:${course.totalLessons ? Math.round(course.completedLessons/course.totalLessons*100) : 0}%;background:linear-gradient(90deg,${colorMap[ci][0]},${colorMap[ci][1]});"></div></div>
+                <div style="font-size:.75rem;color:${colorMap[ci][0]};font-weight:600;margin-top:4px;">${course.totalLessons ? Math.round(course.completedLessons/course.totalLessons*100) : 0}% complete</div>
+              </div>
+            </div>
+            <div class="course-actions">
+              <button class="cta-btn" onclick="alert('Resuming ${course.title}...')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume: Continue</button>
+              <button class="cta-btn" style="color:#6b7280;"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg>Take Test</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      coursesList.innerHTML = '<div class="loading-text">No courses enrolled yet.</div>';
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch (err) {
+    console.warn('Courses load error:', err);
+    loading.innerHTML = '<div class="error-text">Could not load courses. Please try again later.</div>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!userId) {
+    document.getElementById('coursesLoading').innerHTML = '<div class="error-text">Please log in to view your courses.</div>';
+    return;
+  }
+  loadCourses();
+});
+
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
+</script>
+</body>
+</html>

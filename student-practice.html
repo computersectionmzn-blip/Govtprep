@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>GovtPrep — Practice Zone</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .practice-card {
+      background: rgba(255, 255, 255, .32);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: 18px;
+      box-shadow: 6px 6px 16px rgba(163, 177, 198, .55), -6px -6px 16px rgba(255, 255, 255, .85);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .practice-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 8px 8px 24px rgba(163, 177, 198, .6), -8px -8px 24px rgba(255, 255, 255, .9);
+    }
+
+    .practice-emoji {
+      font-size: 2.2rem;
+    }
+
+    .practice-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .practice-desc {
+      font-size: .82rem;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .practice-meta {
+      font-size: .76rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-top: auto;
+    }
+
+    .quiz-question {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .quiz-option {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(240, 243, 247, .6);
+      border: 1px solid rgba(255, 255, 255, .5);
+      font-size: .9rem;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: left;
+      box-shadow: 3px 3px 6px rgba(163, 177, 198, .3), -3px -3px 6px rgba(255, 255, 255, .7);
+    }
+
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, .8);
+      color: #4f46e5;
+    }
+
+    .quiz-option.correct {
+      background: rgba(187, 247, 208, .8);
+      border-color: #22c55e;
+      color: #15803d;
+      box-shadow: none;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(254, 202, 202, .8);
+      border-color: #ef4444;
+      color: #b91c1c;
+      box-shadow: none;
+    }
+
+    .quiz-option.board-option {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff !important;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .quiz-option.board-option:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+      color: #ffffff !important;
+    }
+
+    .quiz-option.board-option.correct {
+      background: rgba(34, 197, 94, 0.85) !important;
+      border-color: #22c55e !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .quiz-option.board-option.wrong {
+      background: rgba(239, 68, 68, 0.85) !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .quiz-progress {
+      font-size: .8rem;
+      color: #6b7280;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(79, 70, 229, 0.1);
+      border-left-color: #4f46e5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes floatTeacher {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .teacher-column img {
+      mix-blend-mode: multiply;
+      background: transparent;
+    }
+
+    .board-column {
+      overflow: hidden;
+    }
+
+    .board-column .quiz-question {
+      font-size: 0.95rem !important;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .board-column .quiz-option.board-option {
+      padding: 10px 14px;
+      font-size: 0.82rem;
+    }
+
+    .loading-text {
+      text-align: center;
+      color: #6b7280;
+      font-size: .85rem;
+      padding: 20px;
+    }
+    .error-text {
+      text-align: center;
+      color: #b91c1c;
+      font-size: .85rem;
+      padding: 20px;
+    }
+
+    @media(max-width:900px) {
+      .practice-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:640px) {
+      .practice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="7" stroke="#4f46e5" stroke-width="2" />
+          <path d="M16 2v4M16 26v4M2 16h4M26 16h4" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" />
+          <circle cx="16" cy="16" r="3" fill="#4f46e5" />
+        </svg></div>
+      <div>
+        <div class="logo-text">GovtPrep</div>
+        <div class="logo-sub">Student Portal</div>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Main</div>
+      <a href="student-dashboard.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>Dashboard</a>
+      <a href="student-courses.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>My Courses</a>
+      <a href="student-tests.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        </svg>Mock Tests</a>
+      <a href="student-performance.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 20V10M12 20V4M6 20v-6" />
+        </svg>Performance</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Study</div>
+      <a href="student-practice.html" class="nav-item active"><svg width="17" height="17" fill="none"
+          stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>Practice Zone</a>
+      <a href="student-plan.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>Study Plan</a>
+      <a href="student-affairs.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>Current Affairs</a>
+    </div>
+    <div class="sidebar-footer"><a href="login.html" class="nav-item" style="color:#ef4444;"><svg width="17" height="17"
+          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>Logout</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Practice Zone</h1>
+        <p>Master specific topics with focused quizzes</p>
+      </div>
+      <div class="topbar-right">
+        <button class="hamburger" onclick="toggleSidebar()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <button class="notif-btn"><svg width="17" height="17" fill="none" stroke="currentColor"
+            stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg><span class="notif-dot"></span></button>
+        <div class="avatar" id="avatarInitials">RS</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue"></div>
+        <div class="stat-val" id="statAttempted">0</div>
+        <div class="stat-lbl">Questions Attempted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"></div>
+        <div class="stat-val" id="statAccuracy">0%</div>
+        <div class="stat-lbl">Accuracy Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple"></div>
+        <div class="stat-val" id="statBookmarked">0</div>
+        <div class="stat-lbl">Bookmarked Qs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange"></div>
+        <div class="stat-val" id="statMastered">0</div>
+        <div class="stat-lbl">Topics Mastered</div>
+      </div>
+    </div>
+
+    <div id="practiceLoading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading practice topics...</div>
+    </div>
+
+    <div class="practice-grid" id="practiceGrid" style="display:none;"></div>
+  </main>
+
+  <!-- Interactive Neumorphic Quiz Modal -->
+  <div class="modal-overlay" id="quizModal">
+    <div class="modal" style="max-width: 840px; padding: 24px; overflow: visible;">
+      <button class="modal-close" onclick="closeQuiz()">✕</button>
+      <h2 id="modalSubjectTitle" style="margin-bottom: 16px;">Subject Practice</h2>
+
+      <div id="quizLoadingState">
+        <div class="loading-spinner"></div>
+        <p style="text-align: center; color: #6b7280; font-size: 0.85rem;">Loading questions from server...</p>
+      </div>
+
+      <div id="quizContainer" style="display: none; align-items: stretch; gap: 0;">
+
+        <div class="board-column"
+          style="flex: 1; background: url('images/questionboard.png') no-repeat center; background-size: cover; border-radius: 20px 0 0 20px; padding: 28px 30px; color: #fff; min-height: 360px; box-shadow: inset 0 0 80px rgba(0,0,0,0.85), 6px 6px 18px rgba(163,177,198,0.35); display: flex; flex-direction: column; position: relative; border: 4px solid #8B5A2B; border-right: none;">
+
+          <div id="quizContent"
+            style="width: 100%; display: flex; flex-direction: column; justify-content: center; flex: 1; overflow: hidden;">
+            <div>
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.3); padding-bottom: 8px;">
+                <span class="quiz-progress" id="quizProgressText"
+                  style="color: #a5b4fc; font-size: 0.78rem; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">Question
+                  1 of 5</span>
+                <span
+                  style="color: #bbf7d0; font-size: 0.72rem; font-weight: 700; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 8px;"
+                  id="teacherTip">📌 Read carefully</span>
+              </div>
+
+              <div class="prog-bar-bg" style="margin-bottom: 16px; background: rgba(255,255,255,0.25);">
+                <div class="prog-bar" id="quizProgressBar"
+                  style="width: 20%; background: linear-gradient(90deg, #38bdf8, #818cf8);"></div>
+              </div>
+
+              <div class="quiz-question" id="quizQuestionText"
+                style="color: #ffffff; font-size: 0.95rem; font-weight: 700; line-height: 1.35; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); margin-bottom: 18px; word-wrap: break-word; overflow-wrap: break-word;">
+              </div>
+            </div>
+
+            <div class="quiz-options" id="quizOptionsContainer" style="margin-bottom: 14px;">
+            </div>
+
+            <button class="cta-btn btn-block" id="quizNextBtn"
+              style="display: none; background: #22c55e; color: #fff; border: none; box-shadow: 0 4px 12px rgba(34,197,94,0.4); font-size: 0.85rem; padding: 12px;"
+              onclick="nextQuestion()">Next Question</button>
+          </div>
+        </div>
+
+        <div class="teacher-column"
+          style="flex: 0 0 170px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; background: #e0e5ec; border-radius: 0 20px 20px 0; padding: 16px 12px 12px;">
+          <img id="teacherImage" src="" alt="Teacher"
+            style="max-width: 100%; max-height: 280px; object-fit: contain; animation: floatTeacher 4s ease-in-out infinite alternate;">
+          <div
+            style="font-size: 0.7rem; font-weight: 700; color: #4f46e5; margin-top: 8px; text-align: center; background: rgba(255,255,255,0.7); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.5);"
+            id="teacherLabel">Your Teacher</div>
+        </div>
+
+      </div>
+
+      <div id="quizResultState" style="display: none; text-align: center; padding: 20px 0;">
+        <div style="font-size: 3.5rem; margin-bottom: 16px;">🏆</div>
+        <h3 style="font-size: 1.3rem; font-weight: 800; color: #1f2937; margin-bottom: 8px;">Quiz Completed!</h3>
+        <p id="quizScoreText" style="color: #6b7280; font-size: 0.95rem; margin-bottom: 24px;">You scored 4 out of 5</p>
+        <button class="cta-btn btn-block" onclick="closeQuiz()">Finish &amp; Save Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api';
+    const userId = localStorage.getItem('userId');
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let hasAnswered = false;
+
+    async function loadTopics() {
+      const loading = document.getElementById('practiceLoading');
+      const grid = document.getElementById('practiceGrid');
+
+      try {
+        const res = await fetch(`${API}/practice/topics`);
+        if (!res.ok) throw new Error('Failed to fetch topics');
+        const raw = await res.json();
+        const topics = raw.data || [];
+
+        const emojis = ['🏛️', '📜', '🌍', '📈', '🧩', '✍️'];
+        const colors = ['#dbeafe,#bfdbfe', '#dcfce7,#bbf7d0', '#ffedd5,#fed7aa', '#ede9fe,#ddd6fe', '#fce7f3,#fbcfe8', '#e0f2fe,#bae6fd'];
+
+        if (topics.length > 0) {
+          grid.style.display = 'grid';
+          grid.innerHTML = topics.map((topic, i) => {
+            const ci = i % colors.length;
+            return `
+              <div class="practice-card" onclick="loadQuiz('${topic.title.replace(/'/g, "\\'")}', '${topic._id}')">
+                <div class="practice-emoji">${topic.emoji || emojis[ci]}</div>
+                <div class="practice-title">${topic.title}</div>
+                <div class="practice-desc">${topic.description || ''}</div>
+                <div class="practice-meta">${topic.totalQuestions || '?'} Questions Available ${topic.completedPercentage ? '· ' + topic.completedPercentage + '% Completed' : ''}</div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          grid.style.display = 'block';
+          grid.innerHTML = '<div class="loading-text">No practice topics available.</div>';
+        }
+
+        const totalQs = topics.reduce((s, t) => s + (t.totalQuestions || 0), 0);
+        const completed = topics.reduce((s, t) => s + (t.completedPercentage || 0), 0);
+        document.getElementById('statAttempted').textContent = totalQs;
+        document.getElementById('statAccuracy').textContent = topics.length ? Math.round(completed / topics.length) + '%' : '0%';
+        document.getElementById('statMastered').textContent = topics.filter(t => (t.completedPercentage || 0) >= 80).length;
+
+        loading.style.display = 'none';
+      } catch (err) {
+        console.warn('Topics load error:', err);
+        loading.innerHTML = '<div class="error-text">Could not load practice topics. Please try again.</div>';
+      }
+    }
+
+    async function loadQuiz(subjectName, topicId) {
+      document.getElementById('modalSubjectTitle').textContent = subjectName + " Practice";
+      document.getElementById('quizLoadingState').style.display = 'block';
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('quizResultState').style.display = 'none';
+      document.getElementById('quizModal').classList.add('open');
+
+      currentQuestionIndex = 0;
+      score = 0;
+      hasAnswered = false;
+
+      const gender = localStorage.getItem('studentGender') || 'male';
+      const teacherImage = document.getElementById('teacherImage');
+      const teacherLabel = document.getElementById('teacherLabel');
+
+      if (gender === 'female') {
+        teacherImage.src = 'images/MaleTeacher.png';
+        teacherLabel.textContent = 'Prof. Vikram';
+      } else {
+        teacherImage.src = 'images/FemaleTeacher.png';
+        teacherLabel.textContent = 'Prof. Anjali';
+      }
+
+      try {
+        const res = await fetch(`${API}/practice/topics/${topicId}`);
+        if (!res.ok) throw new Error("Failed to fetch questions");
+        const raw = await res.json();
+        const topic = raw.data || raw;
+        const questions = topic.questions || [];
+
+        if (questions.length > 0) {
+          currentQuestions = questions.map(item => ({
+            q: item.question,
+            a: item.answer,
+            opts: item.options || shuffleArray([item.answer, ...(item.distractors || [])])
+          }));
+        } else {
+          throw new Error("No questions for this topic");
+        }
+      } catch (err) {
+        console.warn("Could not fetch questions:", err);
+        document.getElementById('quizLoadingState').innerHTML = '<div class="error-text">Failed to load questions for this topic.</div>';
+        return;
+      }
+
+      document.getElementById('quizLoadingState').style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'flex';
+      renderQuestion();
+    }
+
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function renderQuestion() {
+      hasAnswered = false;
+      document.getElementById('quizNextBtn').style.display = 'none';
+
+      const qObj = currentQuestions[currentQuestionIndex];
+      document.getElementById('quizProgressText').textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+      document.getElementById('quizProgressBar').style.width = `${((currentQuestionIndex + 1) / currentQuestions.length) * 100}%`;
+
+      document.getElementById('quizQuestionText').textContent = qObj.q;
+
+      const container = document.getElementById('quizOptionsContainer');
+      container.innerHTML = '';
+
+      const labels = ['A', 'B', 'C', 'D'];
+      qObj.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option board-option';
+        btn.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);font-size:0.72rem;font-weight:800;margin-right:8px;flex-shrink:0;">${labels[i]}</span>${opt}`;
+        btn.dataset.value = opt;
+        btn.onclick = () => selectOption(btn, opt, qObj.a);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectOption(btn, selected, correct) {
+      if (hasAnswered) return;
+      hasAnswered = true;
+
+      const allBtns = document.querySelectorAll('.quiz-option');
+      allBtns.forEach(b => {
+        if (b.dataset.value === correct) {
+          b.classList.add('correct');
+        }
+      });
+
+      if (selected === correct) {
+        score++;
+      } else {
+        btn.classList.add('wrong');
+      }
+
+      document.getElementById('quizNextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < currentQuestions.length) {
+        renderQuestion();
+      } else {
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('quizResultState').style.display = 'block';
+        document.getElementById('quizScoreText').textContent = `You scored ${score} out of ${currentQuestions.length}`;
+      }
+    }
+
+    function closeQuiz() {
+      document.getElementById('quizModal').classList.remove('open');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTopics();
+    });
+
+    function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
+</script>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+</body>
+</html>

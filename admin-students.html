@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GovtPrep Admin — Students</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.search-bar{display:flex;gap:12px;margin-bottom:20px;}
+.search-bar .form-input{max-width:320px;padding:10px 14px;}
+.filter-btn{padding:10px 16px;background:rgba(240,243,247,.85);border:1px solid rgba(255,255,255,.55);border-radius:13px;color:#374151;font-size:.83rem;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:3px 3px 8px rgba(163,177,198,.4),-3px -3px 8px rgba(255,255,255,.8);transition:all .2s;}
+.filter-btn.active,.filter-btn:hover{background:rgba(255,255,255,.9);color:#4f46e5;}
+.avatar-sm{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#a1c4fd,#c2e9fb);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#1e3a8a;vertical-align:middle;margin-right:8px;}
+.pagination{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+.page-btn{width:34px;height:34px;border-radius:10px;background:rgba(240,243,247,.85);border:1px solid rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.83rem;font-weight:600;color:#374151;box-shadow:3px 3px 7px rgba(163,177,198,.4),-3px -3px 7px rgba(255,255,255,.8);transition:all .2s;}
+.page-btn.active,.page-btn:hover{background:rgba(255,255,255,.9);color:#4f46e5;}
+.loading{text-align:center;padding:30px;color:#6b7280;}
+.error{text-align:center;padding:30px;color:#b91c1c;}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="7" stroke="#4f46e5" stroke-width="2"/><path d="M16 2v4M16 26v4M2 16h4M26 16h4" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="3" fill="#4f46e5"/></svg></div>
+    <div><div class="logo-text">GovtPrep</div><div class="logo-sub">Admin Panel</div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <a href="admin-dashboard.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="admin-students.html" class="nav-item active"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Students</a>
+    <a href="admin-courses.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Courses</a>
+    <a href="admin-tests.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Mock Tests</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Manage</div>
+    <a href="admin-payments.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Payments</a>
+    <a href="admin-reports.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Reports</a>
+    <a href="admin-settings.html" class="nav-item"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 6.34L3.93 4.93M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>Settings</a>
+  </div>
+  <div class="sidebar-footer"><a href="login.html" class="nav-item" style="color:#ef4444;"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div><h1>Students</h1><p>Manage all registered students</p></div>
+    <div class="topbar-right">
+      <button class="hamburger" onclick="toggleSidebar()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="notif-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notif-dot"></span></button>
+      <div class="avatar">AD</div>
+    </div>
+  </div>
+
+  <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat-card"><div class="stat-icon blue"><svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-val" id="totalStudents">—</div><div class="stat-lbl">Total Students</div></div>
+    <div class="stat-card"><div class="stat-icon green"><svg width="20" height="20" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-val" id="activeStudents">—</div><div class="stat-lbl">Active</div></div>
+    <div class="stat-card"><div class="stat-icon orange"><svg width="20" height="20" fill="none" stroke="#ea580c" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="stat-val" id="pendingStudents">—</div><div class="stat-lbl">Pending Verify</div></div>
+    <div class="stat-card"><div class="stat-icon purple"><svg width="20" height="20" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="21" y1="8" x2="21" y2="14"/><line x1="24" y1="11" x2="18" y2="11"/></svg></div><div class="stat-val" id="newStudents">—</div><div class="stat-lbl">New This Week</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="section-title">All Students</span>
+      <button class="cta-btn" onclick="document.getElementById('addModal').classList.add('open')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Student</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" class="form-input" placeholder="🔍  Search by name, email or exam…" oninput="filterStudents(this.value)">
+      <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+      <button class="filter-btn" onclick="setFilter(this,'active')">Active</button>
+      <button class="filter-btn" onclick="setFilter(this,'pending')">Pending</button>
+      <button class="filter-btn" onclick="setFilter(this,'inactive')">Inactive</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>Email</th><th>Exam</th><th>Joined</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="studentTable">
+          <tr><td colspan="6" class="loading">Loading students...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+</main>
+
+<!-- Add Student Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('addModal').classList.remove('open')">✕</button>
+    <h2>Add New Student</h2>
+    <div class="form-row">
+      <div class="form-group"><label>Full Name</label><input type="text" class="form-input" placeholder="e.g. Ravi Sharma"></div>
+      <div class="form-group"><label>Email</label><input type="email" class="form-input" placeholder="email@example.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Mobile</label><input type="tel" class="form-input" placeholder="10-digit number"></div>
+      <div class="form-group"><label>Target Exam</label><select class="form-select"><option>UPSC CSE</option><option>SSC CGL</option><option>IBPS PO</option><option>Railway RRB</option><option>State PSC</option></select></div>
+    </div>
+    <button class="cta-btn btn-block" onclick="alert('Student added successfully!');document.getElementById('addModal').classList.remove('open')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Student</button>
+  </div>
+</div>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
+
+const API = '/api';
+let allStudents = [];
+
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function getTagClass(status) {
+  const s = (status || 'active').toLowerCase();
+  if (s === 'active') return 'active';
+  if (s === 'pending') return 'pending';
+  return 'inactive';
+}
+
+function renderTable(students) {
+  const tbody = document.getElementById('studentTable');
+  if (students.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">No students found</td></tr>';
+    return;
+  }
+  tbody.innerHTML = students.map(s => {
+    const name = s.name || s.fullName || 'Unknown';
+    const email = s.email || '-';
+    const exam = s.exam || s.targetExam || '-';
+    const joined = s.joined || s.createdAt || '';
+    const joinedDate = joined ? new Date(joined).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+    const status = s.status || 'active';
+    const tagClass = getTagClass(status);
+    const initials = getInitials(name);
+    return `<tr><td><span class="avatar-sm">${initials}</span><b>${name}</b></td><td>${email}</td><td>${exam}</td><td>${joinedDate}</td><td><span class="tag ${tagClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td><td><a href="#" class="cta-btn" style="padding:5px 12px;font-size:.75rem;">View</a></td></tr>`;
+  }).join('');
+}
+
+async function loadStudents() {
+  try {
+    const res = await fetch(`${API}/users/students`);
+    let students = await res.json();
+    if (!Array.isArray(students)) students = students.data || students.users || [];
+    allStudents = students;
+
+    const total = students.length;
+    const active = students.filter(s => (s.status || 'active').toLowerCase() === 'active').length;
+    const pending = students.filter(s => (s.status || '').toLowerCase() === 'pending').length;
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const newThisWeek = students.filter(s => {
+      const d = new Date(s.joined || s.createdAt || 0);
+      return d >= weekAgo;
+    }).length;
+
+    document.getElementById('totalStudents').textContent = total.toLocaleString();
+    document.getElementById('activeStudents').textContent = active.toLocaleString();
+    document.getElementById('pendingStudents').textContent = pending.toLocaleString();
+    document.getElementById('newStudents').textContent = newThisWeek.toLocaleString();
+
+    renderTable(students);
+  } catch (err) {
+    document.getElementById('studentTable').innerHTML = '<tr><td colspan="6" class="error">Failed to load students</td></tr>';
+    document.querySelectorAll('.stats-grid .stat-val').forEach(el => el.textContent = '—');
+  }
+}
+
+function filterStudents(q) {
+  const filtered = allStudents.filter(s => {
+    const name = (s.name || s.fullName || '').toLowerCase();
+    const email = (s.email || '').toLowerCase();
+    const exam = (s.exam || s.targetExam || '').toLowerCase();
+    const query = q.toLowerCase();
+    return name.includes(query) || email.includes(query) || exam.includes(query);
+  });
+  renderTable(filtered);
+}
+
+function setFilter(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (type === 'all') {
+    renderTable(allStudents);
+  } else {
+    const filtered = allStudents.filter(s => (s.status || 'active').toLowerCase() === type);
+    renderTable(filtered);
+  }
+}
+
+loadStudents();
+</script>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}</script>
+</body>
+</html>
