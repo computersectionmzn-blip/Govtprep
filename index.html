@@ -576,7 +576,7 @@
           <p>Practice Topics</p>
         </div>
         <div class="counter-item">
-          <h2 id="countStudents">8+</h2>
+          <h2 id="countStudents">            <span id="countStudents">8+</span></h2>
           <p>Active Students</p>
         </div>
       </div>
@@ -802,17 +802,20 @@
 
     async function loadCounts() {
       try {
-        const [coursesRes, testsRes, topicsRes] = await Promise.all([
+        const [coursesRes, testsRes, topicsRes, studentsRes] = await Promise.all([
           fetch(`${API}/courses`),
           fetch(`${API}/tests`),
-          fetch(`${API}/practice/topics`)
+          fetch(`${API}/practice/topics`),
+          fetch(`${API}/users/students`)
         ]);
         const courses = (await coursesRes.json()).data || [];
         const tests = (await testsRes.json()).data || [];
         const topics = (await topicsRes.json()).data || [];
+        const students = (await studentsRes.json()).data || [];
         document.getElementById('countCourses').textContent = courses.length + '+';
         document.getElementById('countTests').textContent = tests.length + '+';
         document.getElementById('countTopics').textContent = topics.length + '+';
+        document.getElementById('countStudents').textContent = students.length + '+';
       } catch (e) { /* keep defaults */ }
     }
 

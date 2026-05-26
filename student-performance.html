@@ -196,7 +196,7 @@ async function loadPerformance() {
 
     if (last5.length > 0) {
       historyBody.innerHTML = last5.map(r => {
-        const acc = r.accuracy || (r.total ? Math.round(r.score / r.total * 100) : 0);
+        const acc = r.accuracy ?? (r.total ? Math.round(r.score / r.total * 100) : 0);
         return `
           <tr>
             <td><b>${r.testName || r.name}</b></td>
@@ -215,7 +215,7 @@ async function loadPerformance() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Performance load error:', err);
+    // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load performance data. Please try again later.</div>';
   }
 }

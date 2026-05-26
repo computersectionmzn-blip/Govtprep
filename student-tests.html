@@ -182,7 +182,7 @@ async function loadTests() {
     const pastBody = document.getElementById('pastResultsBody');
     if (results.length > 0) {
       pastBody.innerHTML = results.map(r => {
-        const acc = r.accuracy || (r.total ? Math.round(r.score / r.total * 100) : 0);
+        const acc = r.accuracy ?? (r.total ? Math.round(r.score / r.total * 100) : 0);
         return `
           <tr><td><b>${r.testName || r.name}</b></td><td>${r.date ? new Date(r.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : ''}</td><td>${r.score || 0}/${r.total || 0}</td><td>${acc}%</td><td>#${r.rank || 'N/A'}</td><td><span class="tag ${getTagClass(acc)}">${getTagLabel(acc)}</span></td></tr>
         `;
@@ -194,7 +194,7 @@ async function loadTests() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Tests load error:', err);
+    // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load tests. Please try again later.</div>';
   }
 }

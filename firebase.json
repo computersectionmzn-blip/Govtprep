@@ -15,7 +15,8 @@
       "*.zip"
     ],
     "rewrites": [
-      { "source": "/", "destination": "/login.html" }
+      { "source": "/", "destination": "/login.html" },
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }

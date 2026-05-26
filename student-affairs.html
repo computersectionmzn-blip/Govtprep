@@ -172,7 +172,7 @@
 
     <div id="quizContainer" style="display: none; align-items: stretch; gap: 0;">
       
-      <div class="board-column" style="flex: 1; background: url('images/questionboard.jpg') no-repeat center; background-size: cover; border-radius: 20px 0 0 20px; padding: 22px 24px; color: #fff; min-height: 340px; box-shadow: inset 0 0 80px rgba(0,0,0,0.85), 6px 6px 18px rgba(163,177,198,0.35); display: flex; flex-direction: column; position: relative; border: 4px solid #8B5A2B; border-right: none;">
+      <div class="board-column" style="flex: 1; background: url('images/questionboard.png') no-repeat center; background-size: cover; border-radius: 20px 0 0 20px; padding: 22px 24px; color: #fff; min-height: 340px; box-shadow: inset 0 0 80px rgba(0,0,0,0.85), 6px 6px 18px rgba(163,177,198,0.35); display: flex; flex-direction: column; position: relative; border: 4px solid #8B5A2B; border-right: none;">
         
         <div id="quizContent" style="width: 100%; display: flex; flex-direction: column; justify-content: space-between; flex: 1; overflow: hidden;">
           <div>
@@ -257,7 +257,7 @@ async function loadArticles() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Articles load error:', err);
+      // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load articles. Please try again.</div>';
   }
 }
@@ -298,7 +298,7 @@ async function fetchLiveNews() {
       throw new Error("Empty items");
     }
   } catch (err) {
-    console.warn("Could not fetch RSS feed.", err);
+        // warn suppressed
   } finally {
     loading.style.display = 'none';
     container.style.display = 'block';
@@ -321,11 +321,11 @@ async function startCurrentAffairsQuiz(quizName) {
   const teacherLabel = document.getElementById('teacherLabel');
 
   if (gender === 'female') {
-    teacherImage.src = 'images/MaleTeacher.png';
-    teacherLabel.textContent = 'Prof. Vikram';
-  } else {
     teacherImage.src = 'images/FemaleTeacher.png';
     teacherLabel.textContent = 'Prof. Anjali';
+  } else {
+    teacherImage.src = 'images/MaleTeacher.png';
+    teacherLabel.textContent = 'Prof. Vikram';
   }
 
   try {
@@ -351,7 +351,7 @@ async function startCurrentAffairsQuiz(quizName) {
       throw new Error("No topics");
     }
   } catch (err) {
-    console.warn("Could not load quiz questions from API:", err);
+    // warn suppressed
     document.getElementById('quizLoadingState').innerHTML = '<div class="error-text">Failed to load questions. Please try again.</div>';
     return;
   }

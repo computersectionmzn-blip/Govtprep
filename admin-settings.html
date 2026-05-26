@@ -125,7 +125,7 @@ async function loadSettings() {
       if (el && data[key] === true) el.classList.add('on');
     });
   } catch (err) {
-    console.log('Could not load settings, using defaults');
+    // log suppressed
   }
 }
 
@@ -161,7 +161,7 @@ async function toggleSetting(el, key) {
     await fetch(API + '/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   } catch (err) {
     el.classList.toggle('on');
-    console.log('Toggle failed, reverting');
+    // log suppressed
   }
 }
 

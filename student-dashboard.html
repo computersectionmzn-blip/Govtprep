@@ -363,7 +363,7 @@ async function loadDashboard() {
     const resultsContainer = document.getElementById('recentResultsContainer');
     if (data.recentResults && data.recentResults.length > 0) {
       resultsContainer.innerHTML = data.recentResults.map(r => {
-        const acc = r.accuracy || (r.score / r.total * 100);
+        const acc = r.accuracy ?? (r.score / r.total * 100);
         return `
           <div class="test-row">
             <div>
@@ -384,7 +384,7 @@ async function loadDashboard() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Dashboard load error:', err);
+    // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load dashboard data. Please try again later.</div>';
   }
 }

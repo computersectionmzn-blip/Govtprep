@@ -451,7 +451,7 @@
 
         loading.style.display = 'none';
       } catch (err) {
-        console.warn('Topics load error:', err);
+        // warn suppressed
         loading.innerHTML = '<div class="error-text">Could not load practice topics. Please try again.</div>';
       }
     }
@@ -472,11 +472,11 @@
       const teacherLabel = document.getElementById('teacherLabel');
 
       if (gender === 'female') {
-        teacherImage.src = 'images/MaleTeacher.png';
-        teacherLabel.textContent = 'Prof. Vikram';
-      } else {
         teacherImage.src = 'images/FemaleTeacher.png';
         teacherLabel.textContent = 'Prof. Anjali';
+      } else {
+        teacherImage.src = 'images/MaleTeacher.png';
+        teacherLabel.textContent = 'Prof. Vikram';
       }
 
       try {
@@ -496,7 +496,7 @@
           throw new Error("No questions for this topic");
         }
       } catch (err) {
-        console.warn("Could not fetch questions:", err);
+        // warn suppressed
         document.getElementById('quizLoadingState').innerHTML = '<div class="error-text">Failed to load questions for this topic.</div>';
         return;
       }

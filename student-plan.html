@@ -148,7 +148,7 @@ async function loadPlan() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Plan load error:', err);
+    // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load study plan. Please try again later.</div>';
   }
 }

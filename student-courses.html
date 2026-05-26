@@ -152,7 +152,7 @@ async function loadCourses() {
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch (err) {
-    console.warn('Courses load error:', err);
+    // warn suppressed
     loading.innerHTML = '<div class="error-text">Could not load courses. Please try again later.</div>';
   }
 }

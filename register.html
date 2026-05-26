@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GovtPrep — Create Account</title>
+  <meta name="description" content="Create your GovtPrep account and start preparing for government exams">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #e0e5ec;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .page-split {
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      min-height: 600px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 12px 12px 28px rgba(163,177,198,0.72), -12px -12px 28px rgba(255,255,255,0.88);
+      position: relative;
+      z-index: 10;
+    }
+    .hero-panel {
+      flex: 1 1 50%;
+      position: relative;
+      background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px 32px 28px;
+      overflow: hidden;
+      color: #fff;
+    }
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('images/login-hero.png') center/cover no-repeat;
+      opacity: 0.55;
+    }
+    .hero-panel > * { position: relative; z-index: 2; }
+    .hero-brand {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      z-index: 3;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline { margin-bottom: 12px; }
+    .hero-tagline h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero-tagline .accent-bar {
+      width: 40px;
+      height: 4px;
+      background: #818cf8;
+      border-radius: 2px;
+      margin-bottom: 14px;
+    }
+    .hero-tagline p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.55;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .hero-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-badge .badge-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-badge .badge-icon svg { color: #a5b4fc; }
+    .hero-badge span {
+      font-size: 0.68rem;
+      text-align: center;
+      color: rgba(255,255,255,0.72);
+      font-weight: 500;
+      line-height: 1.25;
+    }
+    .login-side {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #e0e5ec;
+      padding: 24px;
+    }
+    @media (max-width: 768px) {
+      .page-split { flex-direction: column; max-width: 440px; min-height: auto; border-radius: 22px; }
+      .hero-panel { min-height: 220px; padding: 28px 22px 20px; }
+      .hero-brand { top: 20px; left: 22px; font-size: 1.35rem; }
+      .hero-tagline h2 { font-size: 1.25rem; }
+      .hero-badges { gap: 16px; }
+      .hero-badge .badge-icon { width: 32px; height: 32px; }
+      .login-side { padding: 16px; }
+    }
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.6;
+      animation: floatBlob 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .blob-1 {
+      top: 8%; left: 10%;
+      width: 38vw; height: 38vw;
+      max-width: 320px; max-height: 320px;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    }
+    .blob-2 {
+      bottom: 8%; right: 10%;
+      width: 32vw; height: 32vw;
+      max-width: 270px; max-height: 270px;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      animation-delay: -4s;
+    }
+    @keyframes floatBlob {
+      0%   { transform: translateY(0) scale(1); }
+      100% { transform: translateY(20px) scale(1.04); }
+    }
+    .login-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 400px;
+    }
+    .page-split ~ .bg-blob { display: none; }
+    .login-container {
+      width: 100%;
+      padding: 40px 36px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.32);
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,0.5);
+      box-shadow: 12px 12px 28px rgba(163,177,198,0.72), -12px -12px 28px rgba(255,255,255,0.88);
+    }
+    .login-header { text-align: center; margin-bottom: 32px; }
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #1e3a8a, #4f46e5 60%, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .login-header h1 {
+      color: #1f2937;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin: 12px 0 4px;
+    }
+    .login-header p {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .form-group label {
+      display: block;
+      color: #374151;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      pointer-events: none;
+      transition: color 0.25s;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 12px;
+      background: rgba(224,229,236,0.45);
+      color: #1f2937;
+      outline: none;
+      transition: all 0.25s;
+      box-shadow: inset 3px 3px 6px rgba(163,177,198,0.35), inset -3px -3px 6px rgba(255,255,255,0.75);
+    }
+    .form-input::placeholder { color: #9ca3af; font-size: 0.87rem; }
+    .form-input:focus {
+      background: rgba(255,255,255,0.65);
+      border-color: rgba(161,196,253,0.7);
+      box-shadow: 0 0 0 3px rgba(161,196,253,0.28), inset 1px 1px 3px rgba(163,177,198,0.1);
+    }
+    .input-wrapper:focus-within .input-icon { color: #4f46e5; }
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: #4f46e5;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .submit-btn:hover { background: #4338ca; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,70,229,0.4); }
+    .submit-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(79,70,229,0.3); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .msg-box {
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .msg-box.error { background: rgba(254,202,202,0.6); border: 1px solid rgba(252,165,165,0.7); color: #b91c1c; }
+    .msg-box.success { background: rgba(187,247,208,0.6); border: 1px solid rgba(134,239,172,0.7); color: #15803d; }
+    .footer-text {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: #6b7280;
+    }
+    .footer-text a { color: #4f46e5; text-decoration: none; font-weight: 600; }
+    .footer-text a:hover { text-decoration: underline; }
+    @media (max-width: 480px) {
+      .login-container { padding: 28px 20px; border-radius: 22px; }
+      .login-header h1 { font-size: 1.2rem; }
+      .brand-name { font-size: 1.3rem; }
+    }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js",
+      "firebase/analytics": "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"
+    }
+  }
+  </script>
+  <script type="module" src="firebase-init.js"></script>
+</head>
+<body>
+  <div class="page-split">
+    <div class="hero-panel">
+      <span class="hero-brand">GovtPrep</span>
+      <div class="hero-tagline">
+        <h2>Start Your Journey<br>to Government Success</h2>
+        <div class="accent-bar"></div>
+        <p>Join thousands of aspirants preparing for UPSC, SSC, Banking,<br>Railway and State PSC exams on India's trusted platform.</p>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge">
+          <div class="badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <span>Expert<br>Guidance</span>
+        </div>
+        <div class="hero-badge">
+          <div class="badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+          <span>Smart<br>Preparation</span>
+        </div>
+        <div class="hero-badge">
+          <div class="badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <span>Proven<br>Results</span>
+        </div>
+        <div class="hero-badge">
+          <div class="badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <span>Trusted by<br>Aspirants</span>
+        </div>
+      </div>
+    </div>
+    <div class="login-side">
+      <div class="login-wrapper">
+        <div class="login-container">
+          <div class="login-header">
+            <span class="brand-name">GovtPrep</span>
+            <h1>Create Account</h1>
+            <p>Start your preparation journey</p>
+          </div>
+          <div id="msg-box" class="msg-box" role="alert"></div>
+          <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <div class="input-wrapper">
+                  <input type="text" id="firstName" class="form-input"
+                    placeholder="First" required autocomplete="given-name"
+                    spellcheck="false">
+                  <span class="input-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <div class="input-wrapper">
+                  <input type="text" id="lastName" class="form-input"
+                    placeholder="Last" autocomplete="family-name"
+                    spellcheck="false">
+                  <span class="input-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <div class="input-wrapper">
+                <input type="email" id="email" class="form-input"
+                  placeholder="you@example.com" required autocomplete="email"
+                  spellcheck="false">
+                <span class="input-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                  <input type="password" id="password" class="form-input"
+                    placeholder="Min 6 characters" required autocomplete="new-password"
+                    minlength="6" spellcheck="false">
+                  <span class="input-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-wrapper">
+                  <input type="password" id="confirmPassword" class="form-input"
+                    placeholder="Repeat password" required autocomplete="new-password"
+                    minlength="6" spellcheck="false">
+                  <span class="input-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="submit-btn" id="registerBtn">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+              Create Account
+            </button>
+          </form>
+          <div class="footer-text">
+            Already have an account? <a href="login.html">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <script>
+    function showMsg(text, type) {
+      const box = document.getElementById('msg-box');
+      box.textContent = text;
+      box.className = 'msg-box ' + type;
+      box.style.display = 'block';
+    }
+    const API = 'https://govtprep.onrender.com/api';
+    function handleRegister(event) {
+      event.preventDefault();
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      const btn = document.getElementById('registerBtn');
+      if (!firstName) { showMsg('Please enter your first name.', 'error'); return; }
+      if (!email) { showMsg('Please enter your email.', 'error'); return; }
+      if (password.length < 6) { showMsg('Password must be at least 6 characters.', 'error'); return; }
+      if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
+      btn.disabled = true;
+      btn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke-dasharray="40" stroke-dashoffset="10"/></svg> Creating Account…';
+      const name = lastName ? firstName + ' ' + lastName : firstName;
+      fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role: 'student' })
+      })
+        .then(res => res.json())
+        .then(({ data }) => {
+          if (!data) throw new Error('Registration failed');
+          showMsg('Account created successfully! Redirecting to login...', 'success');
+          btn.innerHTML = '✓ Account Created';
+          setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        })
+        .catch(err => {
+          showMsg('Registration failed. Please try again.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account';
+        });
+    }
+  </script>
+  <style>@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+</body>
+</html>
