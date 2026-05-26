@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GovtPrep — India's #1 Government Exam Preparation Platform</title>
+  <meta name="description" content="Prepare for UPSC, SSC, Banking, Railway & State PSC exams with expert-curated courses, mock tests, and study plans.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js",
+      "firebase/analytics": "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"
+    }
+  }
+  </script>
+  <script type="module" src="firebase-init.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #1f2937;
+      overflow-x: hidden;
+      background: #f8fafc;
+    }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .navbar-inner {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e3a8a, #4f46e5, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo i { -webkit-text-fill-color: #4f46e5; font-size: 1.3rem; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #4b5563;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #4f46e5; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #4f46e5;
+      color: #4f46e5;
+    }
+    .btn-outline:hover { background: #4f46e5; color: #fff; }
+    .btn-solid {
+      background: #4f46e5;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+    }
+    .btn-solid:hover { background: #4338ca; transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: #374151; border-radius: 2px; transition: 0.3s; }
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 70px; left: 0; right: 0;
+      background: #fff; padding: 20px 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      z-index: 999;
+      flex-direction: column; gap: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 0.95rem; font-weight: 500; color: #374151; padding: 6px 0; }
+    .mobile-menu .nav-btn { width: 100%; text-align: center; margin-top: 4px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 140px 0 80px;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f0ff 50%, #fdf2f8 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(79,70,229,0.08), transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -20%; left: -5%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06), transparent 70%);
+      border-radius: 50%;
+    }
+    .hero .container { position: relative; z-index: 1; display: flex; align-items: center; gap: 60px; }
+    .hero-text { flex: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(79,70,229,0.1);
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #1e3a8a, #4f46e5, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: #6b7280;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-btns .btn-solid { padding: 14px 32px; font-size: 0.95rem; border-radius: 10px; }
+    .hero-btns .btn-outline { padding: 14px 32px; font-size: 0.95rem; border-radius: 10px; }
+    .hero-visual { flex: 1; display: flex; justify-content: center; position: relative; }
+    .hero-card {
+      width: 100%; max-width: 480px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 60px rgba(79,70,229,0.1);
+    }
+    .hero-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: #1f2937; }
+    .exam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .exam-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      font-weight: 600; font-size: 0.88rem;
+      transition: all 0.2s; cursor: default;
+    }
+    .exam-chip:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transform: translateY(-2px); }
+    .exam-chip .icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .exam-chip .icon.upsc { background: #eef2ff; }
+    .exam-chip .icon.ssc { background: #ecfdf5; }
+    .exam-chip .icon.banking { background: #fff7ed; }
+    .exam-chip .icon.railway { background: #f0f9ff; }
+    .exam-chip .icon.statepsc { background: #f5f3ff; }
+    .exam-chip .icon.general { background: #fef2f2; }
+
+    /* ===== COUNTERS ===== */
+    .counters {
+      padding: 60px 0;
+      background: #fff;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .counter-item {
+      text-align: center;
+      padding: 24px 16px;
+    }
+    .counter-item h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e3a8a, #4f46e5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .counter-item p { color: #6b7280; font-size: 0.9rem; font-weight: 500; margin-top: 4px; }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 80px 0;
+      background: #fff;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-title h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .section-title h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #111827;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 32px 28px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      background: #fff;
+      border-color: #e0e7ff;
+      box-shadow: 0 8px 24px rgba(79,70,229,0.08);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.88rem; color: #6b7280; line-height: 1.6; }
+
+    /* ===== COURSES ===== */
+    .courses-section {
+      padding: 80px 0;
+      background: #f8fafc;
+    }
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background: #fff;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .course-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transform: translateY(-4px);
+    }
+    .course-top {
+      padding: 24px 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .course-emoji {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .course-info { flex: 1; }
+    .course-info .title { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+    .course-info .meta { font-size: 0.78rem; color: #6b7280; }
+    .course-body {
+      padding: 0 20px 20px;
+    }
+    .course-body .desc { font-size: 0.82rem; color: #6b7280; line-height: 1.5; margin-bottom: 12px; }
+    .course-body .stats { display: flex; gap: 16px; font-size: 0.78rem; color: #9ca3af; }
+    .course-body .stats i { margin-right: 4px; }
+    .course-footer {
+      padding: 14px 20px;
+      border-top: 1px solid #f1f5f9;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .course-footer .price { font-weight: 700; font-size: 1rem; color: #4f46e5; }
+    .course-footer .enroll-btn {
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #4f46e5;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    .course-footer .enroll-btn:hover { background: #4338ca; }
+
+    /* ===== CATEGORIES ===== */
+    .categories {
+      padding: 80px 0;
+      background: #fff;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .cat-card {
+      text-align: center;
+      padding: 32px 20px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .cat-card:hover {
+      background: #fff;
+      border-color: #e0e7ff;
+      box-shadow: 0 8px 24px rgba(79,70,229,0.06);
+      transform: translateY(-3px);
+    }
+    .cat-card .icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+    }
+    .cat-card h4 { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .cat-card p { font-size: 0.82rem; color: #9ca3af; }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      padding: 80px 0;
+      background: #f8fafc;
+    }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      background: #fff;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .testi-stars { color: #f59e0b; font-size: 0.85rem; margin-bottom: 12px; }
+    .testi-card p { font-size: 0.88rem; color: #6b7280; line-height: 1.6; margin-bottom: 16px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      color: #fff;
+    }
+    .testi-author .name { font-weight: 600; font-size: 0.88rem; }
+    .testi-author .role { font-size: 0.78rem; color: #9ca3af; }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      padding: 70px 0;
+      background: linear-gradient(135deg, #1e3a8a, #4f46e5, #7c3aed);
+      text-align: center;
+      color: #fff;
+    }
+    .cta-banner h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-banner p { font-size: 1rem; opacity: 0.85; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-banner .btn-solid {
+      background: #fff;
+      color: #4f46e5;
+      box-shadow: none;
+      padding: 14px 36px;
+      font-size: 0.95rem;
+    }
+    .cta-banner .btn-solid:hover { background: #f0f0ff; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 60px 0 30px;
+      background: #111827;
+      color: #d1d5db;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .footer-brand p { font-size: 0.85rem; line-height: 1.6; }
+    .footer-social { display: flex; gap: 12px; margin-top: 16px; }
+    .footer-social a {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      transition: all 0.2s;
+    }
+    .footer-social a:hover { background: #4f46e5; color: #fff; }
+    .footer-col h4 { color: #fff; font-size: 0.9rem; font-weight: 700; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a { font-size: 0.85rem; color: #9ca3af; transition: color 0.2s; }
+    .footer-col ul a:hover { color: #a5b4fc; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #6b7280;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero .container { flex-direction: column; text-align: center; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-btns { justify-content: center; }
+      .counter-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-actions .btn-outline { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 110px 0 60px; }
+      .hero h1 { font-size: 2.2rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .courses-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: 1fr; }
+      .counter-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+      .exam-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.8rem; }
+      .hero-card { padding: 28px 20px; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .counter-item h2 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="nav-logo"><i class="fas fa-graduation-cap"></i> GovtPrep</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="student-courses.html">Courses</a></li>
+        <li><a href="student-practice.html">Practice</a></li>
+        <li><a href="student-tests.html">Tests</a></li>
+        <li><a href="student-plan.html">Study Plan</a></li>
+        <li><a href="student-affairs.html">Current Affairs</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-btn btn-outline" onclick="location.href='login.html'">Sign In</button>
+        <button class="nav-btn btn-solid" onclick="location.href='login.html'">Get Started</button>
+        <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/">Home</a>
+    <a href="student-courses.html">Courses</a>
+    <a href="student-practice.html">Practice</a>
+    <a href="student-tests.html">Tests</a>
+    <a href="student-plan.html">Study Plan</a>
+    <a href="student-affairs.html">Current Affairs</a>
+    <button class="nav-btn btn-solid" onclick="location.href='login.html'" style="margin-top:8px;">Get Started Free</button>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-text">
+        <div class="hero-badge"><i class="fas fa-bolt"></i> India's Trusted Exam Prep Platform</div>
+        <h1>Crack Your Dream<br><span>Government Job</span></h1>
+        <p>Expert-curated courses, live mock tests, and personalized study plans for UPSC, SSC, Banking, Railway & State PSC exams.</p>
+        <div class="hero-btns">
+          <button class="nav-btn btn-solid" onclick="location.href='login.html'">Start Free Trial <i class="fas fa-arrow-right" style="margin-left:6px;font-size:0.85rem;"></i></button>
+          <button class="nav-btn btn-outline" onclick="location.href='student-courses.html'">Explore Courses</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <h3><i class="fas fa-book-open" style="color:#4f46e5;margin-right:8px;"></i> Exams We Cover</h3>
+          <div class="exam-grid">
+            <div class="exam-chip"><div class="icon upsc"><i class="fas fa-landmark"></i></div> UPSC</div>
+            <div class="exam-chip"><div class="icon ssc"><i class="fas fa-chart-bar"></i></div> SSC</div>
+            <div class="exam-chip"><div class="icon banking"><i class="fas fa-university"></i></div> Banking</div>
+            <div class="exam-chip"><div class="icon railway"><i class="fas fa-train"></i></div> Railway</div>
+            <div class="exam-chip"><div class="icon statepsc"><i class="fas fa-building"></i></div> State PSC</div>
+            <div class="exam-chip"><div class="icon general"><i class="fas fa-globe"></i></div> Current Affairs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COUNTERS ===== -->
+  <section class="counters">
+    <div class="container">
+      <div class="counter-grid">
+        <div class="counter-item">
+          <h2 id="countCourses">6+</h2>
+          <p>Expert Courses</p>
+        </div>
+        <div class="counter-item">
+          <h2 id="countTests">6+</h2>
+          <p>Mock Tests</p>
+        </div>
+        <div class="counter-item">
+          <h2 id="countTopics">6+</h2>
+          <p>Practice Topics</p>
+        </div>
+        <div class="counter-item">
+          <h2 id="countStudents">8+</h2>
+          <p>Active Students</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features">
+    <div class="container">
+      <div class="section-title">
+        <h4>Why GovtPrep</h4>
+        <h1>Everything you need to crack the exam</h1>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#6366f1,#a5b4fc);"><i class="fas fa-book-open"></i></div>
+          <h3>Expert-Curated Courses</h3>
+          <p>Comprehensive syllabus coverage designed by top educators and ex-civil servants for every competitive exam.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#22c55e,#86efac);"><i class="fas fa-pen-nib"></i></div>
+          <h3>Real Mock Tests</h3>
+          <p>Full-length and topic-wise tests with detailed analytics, rank prediction, and performance insights.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#f97316,#fdba74);"><i class="fas fa-road"></i></div>
+          <h3>Personalized Study Plan</h3>
+          <p>AI-powered daily study plans that adapt to your strengths, weaknesses, and target exam date.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#0ea5e9,#7dd3fc);"><i class="fas fa-newspaper"></i></div>
+          <h3>Daily Current Affairs</h3>
+          <p>Stay updated with daily news summaries, quizzes, and month-wise compilations for all exams.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#8b5cf6,#c4b5fd);"><i class="fas fa-chart-line"></i></div>
+          <h3>Performance Analytics</h3>
+          <p>Track your progress with detailed charts, subject-wise accuracy, and all-India ranking.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:linear-gradient(135deg,#ec4899,#f9a8d4);"><i class="fas fa-users"></i></div>
+          <h3>Community & Mentorship</h3>
+          <p>Join a community of aspirants, participate in discussions, and get mentorship from toppers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIES ===== -->
+  <section class="categories">
+    <div class="container">
+      <div class="section-title">
+        <h4>Exam Categories</h4>
+        <h1>Choose your target exam</h1>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-card">
+          <div class="icon" style="background:#eef2ff;color:#4f46e5;"><i class="fas fa-landmark"></i></div>
+          <h4>UPSC</h4>
+          <p>Civil Services, CAPF, EPFO, NDA</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#ecfdf5;color:#22c55e;"><i class="fas fa-chart-bar"></i></div>
+          <h4>SSC</h4>
+          <p>CGL, CHSL, MTS, GD, CPO, JE</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#fff7ed;color:#f97316;"><i class="fas fa-university"></i></div>
+          <h4>Banking</h4>
+          <p>IBPS PO, Clerk, RRB, SBI PO</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#f0f9ff;color:#0ea5e9;"><i class="fas fa-train"></i></div>
+          <h4>Railway</h4>
+          <p>RRB NTPC, ALP, Group D, JE</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#f5f3ff;color:#8b5cf6;"><i class="fas fa-building"></i></div>
+          <h4>State PSC</h4>
+          <p>UPPSC, MPPSC, BPSC, UKPSC</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#fef2f2;color:#ef4444;"><i class="fas fa-gavel"></i></div>
+          <h4>Defence</h4>
+          <p>CDS, AFCAT, INET, ACC</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#f0fff4;color:#10b981;"><i class="fas fa-graduation-cap"></i></div>
+          <h4>Teaching</h4>
+          <p>CTET, UGC NET, DSSSB, KVS</p>
+        </div>
+        <div class="cat-card">
+          <div class="icon" style="background:#fefce8;color:#eab308;"><i class="fas fa-file-alt"></i></div>
+          <h4>General</h4>
+          <p>Current Affairs, GK, CSAT</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COURSES ===== -->
+  <section class="courses-section">
+    <div class="container">
+      <div class="section-title">
+        <h4>Popular Courses</h4>
+        <h1>Start learning today</h1>
+      </div>
+      <div class="courses-grid" id="coursesGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;"><i class="fas fa-spinner fa-spin"></i> Loading courses...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h4>Testimonials</h4>
+        <h1>What our students say</h1>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"GovtPrep's mock tests and detailed analytics helped me improve my accuracy from 45% to 82% in just 3 months. The current affairs quizzes are a game changer!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:linear-gradient(135deg,#6366f1,#a5b4fc);">RN</div>
+            <div><div class="name">Ravi Nair</div><div class="role">UPSC Aspirant</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"The study plan feature is incredible. It automatically adjusted my schedule when I was falling behind. I cracked SSC CGL in my first attempt!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:linear-gradient(135deg,#22c55e,#86efac);">PS</div>
+            <div><div class="name">Priya Sharma</div><div class="role">SSC CGL 2025</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"IBPS PO was my dream. The subject-wise performance tracking showed me exactly where I needed to focus. Cleared both Prelims and Mains. Thank you GovtPrep!"</p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:linear-gradient(135deg,#f97316,#fdba74);">AK</div>
+            <div><div class="name">Arjun Kumar</div><div class="role">IBPS PO 2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Ready to start your preparation?</h2>
+      <p>Join thousands of successful aspirants. Start your free trial today — no credit card required.</p>
+      <button class="nav-btn btn-solid" onclick="location.href='login.html'">Create Free Account <i class="fas fa-arrow-right" style="margin-left:6px;"></i></button>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><i class="fas fa-graduation-cap"></i> GovtPrep</div>
+          <p>India's most trusted government exam preparation platform. Empowering aspirants to crack UPSC, SSC, Banking, Railway, and State PSC exams.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="student-courses.html">Courses</a></li>
+            <li><a href="student-practice.html">Practice</a></li>
+            <li><a href="student-tests.html">Mock Tests</a></li>
+            <li><a href="student-plan.html">Study Plan</a></li>
+            <li><a href="student-affairs.html">Current Affairs</a></li>
+            <li><a href="student-performance.html">Performance</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Exams</h4>
+          <ul>
+            <li><a href="#">UPSC CSE</a></li>
+            <li><a href="#">SSC CGL</a></li>
+            <li><a href="#">IBPS PO</a></li>
+            <li><a href="#">RRB NTPC</a></li>
+            <li><a href="#">State PSC</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 GovtPrep. All rights reserved. Made with <i class="fas fa-heart" style="color:#ef4444;"></i> for India's future civil servants.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobile() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.navbar') && !e.target.closest('.mobile-menu')) {
+        document.getElementById('mobileMenu').classList.remove('open');
+      }
+    });
+
+    const API = 'https://govtprep.onrender.com/api';
+
+    async function loadCounts() {
+      try {
+        const [coursesRes, testsRes, topicsRes] = await Promise.all([
+          fetch(`${API}/courses`),
+          fetch(`${API}/tests`),
+          fetch(`${API}/practice/topics`)
+        ]);
+        const courses = (await coursesRes.json()).data || [];
+        const tests = (await testsRes.json()).data || [];
+        const topics = (await topicsRes.json()).data || [];
+        document.getElementById('countCourses').textContent = courses.length + '+';
+        document.getElementById('countTests').textContent = tests.length + '+';
+        document.getElementById('countTopics').textContent = topics.length + '+';
+      } catch (e) { /* keep defaults */ }
+    }
+
+    async function loadCourses() {
+      try {
+        const res = await fetch(`${API}/courses`);
+        const data = await res.json();
+        const courses = data.data || [];
+        const grid = document.getElementById('coursesGrid');
+        if (courses.length === 0) {
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">No courses available yet.</div>';
+          return;
+        }
+        const emojis = ['📜', '📊', '🏦', '🚂', '🏛️', '📝'];
+        const colors = [['#eef2ff','#6366f1'], ['#ecfdf5','#22c55e'], ['#fff7ed','#f97316'], ['#f0f9ff','#0ea5e9'], ['#f5f3ff','#8b5cf6'], ['#fef2f2','#ef4444']];
+        grid.innerHTML = courses.map((c, i) => {
+          const ci = i % colors.length;
+          return `
+            <div class="course-card">
+              <div class="course-top">
+                <div class="course-emoji" style="background:${colors[ci][0]};color:${colors[ci][1]};">${emojis[ci]}</div>
+                <div class="course-info">
+                  <div class="title">${c.title}</div>
+                  <div class="meta">${c.category || 'General'} · ${c.totalLessons || 0} lessons</div>
+                </div>
+              </div>
+              <div class="course-body">
+                <div class="desc">${c.description || ''}</div>
+                <div class="stats"><span><i class="far fa-file-alt"></i> ${c.totalLessons || 0} Lessons</span></div>
+              </div>
+              <div class="course-footer">
+                <div style="font-size:0.82rem;color:#6b7280;"><i class="fas fa-user-graduate"></i> ${c.enrolledCount || 0} enrolled</div>
+                <button class="enroll-btn" onclick="location.href='login.html'">Enroll Free</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        document.getElementById('coursesGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">Could not load courses.</div>';
+      }
+    }
+
+    loadCounts();
+    loadCourses();
+  </script>
+</body>
+</html>
