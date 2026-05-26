@@ -2,8 +2,10 @@
 .env.*
 node_modules/
 server/node_modules/
-functions/node_modules/
 server/.env
 *.log
 .DS_Store
 .firebase/
+*.zip
+dist/
+build/

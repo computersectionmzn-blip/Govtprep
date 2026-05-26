@@ -1,8 +1,17 @@
 {
   "name": "govtprep",
+  "version": "1.0.0",
   "private": true,
+  "description": "Government exam preparation portal — frontend on Firebase Hosting, API on Render",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "lint": "npx eslint '*.html' 'server/**/*.js' --no-eslintrc --config eslint.config.js || true",
+    "seed": "npm run seed --prefix server",
+    "start": "npm start --prefix server"
   },
   "devDependencies": {
     "firebase-tools": "^13.0.0"

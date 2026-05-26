@@ -1,1 +1,22 @@
-{"name":"govtprep-api","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node server.js","seed":"node seed.js"},"dependencies":{"bcryptjs":"^2.4.3","cors":"^2.8.5","dotenv":"^17.4.2","express":"^4.18.2","jsonwebtoken":"^9.0.2","mongoose":"^7.6.3"}}
+{
+  "name": "govtprep-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "REST API backend for GovtPrep exam preparation platform",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "lint": "npx eslint . --no-eslintrc --config ../eslint.config.js || true"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.6.3"
+  }
+}

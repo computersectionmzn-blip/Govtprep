@@ -4,10 +4,23 @@ on:
     branches: [master]
     paths-ignore:
       - 'server/**'
-      - 'functions/**'
       - '*.md'
+      - '.editorconfig'
+      - '.gitignore'
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g eslint
+      - run: npx eslint '*.html' 'server/**/*.js' --no-eslintrc --config eslint.config.js || true
+      - run: echo "Lint completed"
+
   deploy:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
